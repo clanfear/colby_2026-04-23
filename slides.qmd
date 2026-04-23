@@ -1236,6 +1236,8 @@ digraph G{
 * Changing concentrations and contexts
 * Heterogeneity, carrying, and the new decline
 
+. . .
+
 **Cynicism, trust, and the life course**
 
 * Legal cynicism and gun carrying across eras
@@ -1267,6 +1269,7 @@ digraph G{
 * Declining legitimacy of institutions
 * Cynicism and gun culture
 
+. . .
 
 **Women's gun carrying and victimization**
 
