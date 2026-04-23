@@ -875,6 +875,24 @@ Both: **Legal cynicism** and **distrust**
 
 # [Legal cynicism, distrust,</br>and gun carrying]{.r-fit-text}{background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.4"}
 
+## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+> [a] normative conception of **legal cynicism** as a state in which the (legal) **rules of society are no longer seen as binding** within a community: “Normlessness and powerlessness tend also to go hand in hand, breeding **cynicism about the rules of the society and their application**”.
+
+:::
+
+::: {.column width="50%"}
+
+![](img/sampson-bartusch.png)
+
+:::
+
+::::
+
 
 ##  {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
 
@@ -906,23 +924,7 @@ Guns also:
 
 :::
 
-## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
 
-:::: {.columns}
-
-::: {.column width="55%"}
-
-> This is mirrored in Sampson and Bartusch’s (1998: 782) normative conception of legal cynicism as a state in which the (legal) **rules of society are no longer seen as binding** within a community: “Normlessness and powerlessness tend also to go hand in hand, breeding **cynicism about the rules of the society and their application**”.
-
-:::
-
-::: {.column width="45%"}
-
-![](img/sampson-bartusch.png)
-
-:::
-
-::::
 
 ## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
 
