@@ -405,274 +405,10 @@ ggplot(df, aes(x = year, y = cohort, group = cohort)) +
 
 
 
+
 ## {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.2"}
 
 ![](img/sa_cropped.png){fig-align="center"}
-
-. . .
-
-* When does **onset** of concealed carry occur?
-
-. . .
-
-* Is there **continuity** in carry over the life course?
-
-   * Are adolescent carriers still carrying today?
-   * Does it differ for legal and illegal carry? 
-
-. . .
-
-* Does **exposure to gun violence** predict later carrying?
-
-   * Does it differ for adolescents and adults?
-   
-
-
-## [Onset of concealed carry by age]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
-
-```{r}
-#| cache: true
-#| warning: false
-#| message: false
-#| fig-width: 12
-#| fig-height: 4.5
-#| out-width: "100%"
-#| 
-draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
-  plot_out <- plot_curve(covar = covar, 
-           outcome = outcome, 
-           xaxis = xaxis, 
-           title = "none", 
-           b_size = 12, 
-           min_at_risk = 10, 
-           w5_sample = FALSE, 
-           weights = TRUE, 
-           trim_level = 0.95, 
-           font_fam = plot_font, 
-           ylims = ylims, 
-           year_mark = FALSE,
-           title_letters = FALSE,
-           risk_table = FALSE) +
-  labs(title = str_to_title(covar)) +
-  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
-  if(strata_labels){
-   plot_out <- plot_out +
-     geom_text(data = ~. |> 
-                    distinct(strata) |>
-                    mutate(age = case_match(as.character(strata),
-                             "Black" ~ 30,
-                             "White" ~ 30,
-                             "Hispanic" ~ 9,
-                             "Male" ~ 26,
-                             "Female" ~ 27,
-                             "1981" ~ 35,
-                             "1987" ~ 29,
-                             "1996" ~ 30,
-                             "1984" ~ 38
-                           ),
-                           cdf = case_match(as.character(strata),
-                             "Black" ~ 35,
-                             "White" ~ 3,
-                             "Hispanic" ~ 11,
-                             "Male" ~ 30,
-                             "Female" ~ 10,
-                             "1981" ~ 35,
-                             "1987" ~ 25,
-                             "1996" ~ 4,
-                             "1984" ~ 10
-                           )),
-                  aes(x = age, y = cdf, label = strata, color = strata),
-            size = 7,
-            family = plot_font)
-  }
-  plot_out <- plot_out +
-    theme_minimal(base_size = 20) +
-    theme(panel.grid = element_blank(),
-          #panel.grid.major.y = element_line(color = "grey25"),
-          axis.ticks.x = element_line(color = "white"),
-          axis.ticks.y = element_line(color = "white"),
-          axis.text = element_text(color = "white"),
-          text = element_text(family = plot_font,  color = "white"),
-          legend.position = "none",
-          panel.background = element_rect(fill = "transparent",colour = NA),
-          plot.background = element_rect(fill = "transparent",colour = NA),
-          plot.margin = margin(0,0,0,0),
-          axis.line = element_line(color = "white", linewidth = 0.25))
-  if(noaxis){
-    plot_out <- plot_out + theme(axis.text.y = element_blank())
-  }
-  return(plot_out)
-}
-
-(
-  (draw_curve("race", "concealed_carry", ylims = c(0, 50),year_mark = TRUE) + ggtitle("Race / Ethnicity") + theme(plot.margin = margin(0,20,0,0))) + 
-  (draw_curve("sex", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
-  (draw_curve("cohort", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
-  ) &
-  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of carry onset from non-parametric Turnbull MLE with survey and attrition weights")
-
-```
-
-* Rapidly rises in adolescence, then again in 30s
-* Differences sharpest in adolescence
-
-## [Onset of concealed carry by year]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
-
-```{r}
-#| cache: true
-#| warning: false
-#| message: false
-#| fig-width: 12
-#| fig-height: 4.5
-#| out-width: "100%"
-#| 
-draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
-  plot_out <- plot_curve(covar = covar, 
-           outcome = outcome, 
-           xaxis = xaxis, 
-           title = "none", 
-           b_size = 12, 
-           min_at_risk = 10, 
-           w5_sample = FALSE, 
-           weights = TRUE, 
-           trim_level = 0.95, 
-           font_fam = plot_font, 
-           ylims = ylims, 
-           year_mark = FALSE,
-           title_letters = FALSE,
-           risk_table = FALSE) +
-  labs(title = str_to_title(covar)) +
-  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
-  if(strata_labels){
-   plot_out <- plot_out +
-     geom_text(data = ~. |> 
-                    distinct(strata) |>
-                    mutate(age = case_match(as.character(strata),
-                             "Black" ~ 2012,
-                             "White" ~ 2010,
-                             "Hispanic" ~ 2000,
-                             "Male" ~ 2010,
-                             "Female" ~ 2010,
-                             "1981" ~ 2012,
-                             "1987" ~ 2012,
-                             "1996" ~ 2013,
-                             "1984" ~ 2005
-                           ),
-                           cdf = case_match(as.character(strata),
-                             "Black" ~ 18,
-                             "White" ~ 1.5,
-                             "Hispanic" ~ 12,
-                             "Male" ~ 23,
-                             "Female" ~ 6,
-                             "1984" ~ 11,
-                             "1981" ~ 25,
-                             "1987" ~ 14,
-                             "1996" ~ 1
-                           )),
-                  aes(x = age, y = cdf, label = strata, color = strata),
-            size = 7,
-            family = plot_font)
-  }
-  plot_out <- plot_out +
-    annotate("text", x = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]), label = c(2016, 2020), size = 4, vjust = 0, color = "white") +
-    annotate("segment", x = c(2016, 2020), xend = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]) - (ylims[2]/100), yend = c(-Inf,-Inf), linetype = "dashed", alpha = 0.75, linewidth = 0.5, color = "white")+
-    theme_minimal(base_size = 20) +
-    theme(panel.grid = element_blank(),
-          #panel.grid.major.y = element_line(color = "grey25"),
-          axis.ticks.x = element_line(color = "white"),
-          axis.ticks.y = element_line(color = "white"),
-          axis.text = element_text(color = "white"),
-          text = element_text(family = plot_font,  color = "white"),
-          legend.position = "none",
-          panel.background = element_rect(fill = "transparent",colour = NA),
-          plot.background = element_rect(fill = "transparent",colour = NA),
-          plot.margin = margin(0,0,0,0),
-          axis.line = element_line(color = "white", linewidth = 0.25))
-  if(noaxis){
-    plot_out <- plot_out + theme(axis.text.y = element_blank())
-  }
-  return(plot_out)
-}
-
-(
-  (draw_curve("race", "concealed_carry", "year", ylims = c(0, 40),year_mark = TRUE) + ggtitle("Race / Ethnicity") + theme(plot.margin = margin(0,20,0,0))) + 
-  (draw_curve("sex", "concealed_carry", "year",ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
-  (draw_curve("cohort", "concealed_carry", "year", ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
-  ) &
-  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of carry onset from non-parametric Turnbull MLE with survey and attrition weights")
-```
-
-* Adult increases are period effects
-* Large increases in new carriers since 2016
-
-## [Continuity: Who is still carrying in 2020?]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
-
-
-```{r}
-#| cache: true
-load("./data/continuity_within_data.RData")
-continuity_within_data |>
-  filter(group == "Within onset group" & concealed_carry_status != "Did not carry" & !str_detect(Initiation, "Never carried")) |>
-  mutate(Initiation = str_remove(Initiation, "\\n\\(n=.*$")) |>
-  ggplot(aes(x = Initiation, group = concealed_carry_status, fill = concealed_carry_status, y = pr)) +
-  geom_col() +
-  scale_fill_manual(values = as.vector(khroma::color("highcontrast")(2)), labels = c("Permitted carry" = "With permit", "Unpermitted carry" = "Without permit")) +
-  scale_y_continuous(labels = scales::label_percent(scale = 100), limits = c(0,1)) +
-  labs(x = NULL, y = NULL, title = NULL, fill = NULL) +
-  theme_minimal(base_size = 24) +
-  theme(panel.grid = element_blank(),
-        plot.caption = element_text(size = rel(0.6)),
-        axis.text = element_text(family = plot_font,  color = "white"),
-        text = element_text(family = plot_font,  color = "white"),
-        panel.background = element_rect(fill = "transparent",colour = NA),
-        plot.background = element_rect(fill = "transparent",colour = NA),
-        plot.margin = margin(30,30,30,30, "pt"),
-        axis.ticks.y = element_line(color = "white"),
-        axis.line = element_line(color = "white", linewidth = 0.25),
-        legend.position = c(0.2, 0.9))
-```
-
-* 60% of young carriers not carrying today
-* Young carriers no more likely to carry without permits
-
-## [Exposure to gun violence and carrying]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
-
-```{r}
-#| cache: true
-load("./data/exp_preds.RData")
-exp_preds  |>
-  mutate(model = str_remove(model, "\\n\\(N=.*$")) |>
-  ggplot(aes(x = model, group = exposed, fill = exposed, y = estimate)) +
-  geom_col(position = "dodge") +
-  theme_minimal(base_size = 24) +
-  coord_cartesian(ylim = c(0, 0.25)) +
-  scale_y_continuous(labels = scales::label_percent(scale = 100)) +
-  # annotate("text", x = 0, y = 0.7, label = "Age", size = 9,  hjust = 0, color = "white") +
-  scale_fill_discrete(name = NULL) +
-  theme_minimal(base_size = 24) +
-  labs(x = NULL, y = NULL, caption = "Average predictions from Firth logit and Cox PH models adjusted for family and neighborhood characteristics") +
-  theme(panel.grid = element_blank(),
-        plot.caption = element_text(size = rel(0.5)),
-        text = element_text(family = plot_font,  color = "white"),
-        axis.ticks.length = unit(0, "pt"),
-        axis.text = element_text(color = "white"),
-        axis.text.x = element_text(vjust = 0.5, margin = margin(0,0,0,0), size = rel(1.2)),
-        panel.background = element_rect(fill = "transparent",colour = NA),
-        plot.background = element_rect(fill = "transparent",colour = NA),
-        # panel.grid.major.y = element_line(color = "grey25"),
-        legend.position = c(0.15, 0.85),
-        plot.margin = margin(0,0,0,0),
-        axis.ticks.y = element_line(color = "white"),
-        axis.line = element_line(color = "white", linewidth = 0.25))
-```
-
-* Exposed adolescents twice as likely to carry
-* Adult carry similar between those exposed and not
-
-
-## [Two pathways of gun carrying]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.2"}
-
-&nbsp;
 
 ::::: {.columns}
 
@@ -710,7 +446,6 @@ exp_preds  |>
 
 . . .
 
-&nbsp;
 
 :::: {style="text-align: center;"}
 
@@ -949,28 +684,6 @@ combined_plot <- combined_plot &  plot_annotation(theme = theme(plot.background 
 combined_plot
 ```
 
-
-## Proportion using firearms
-
-```{r}
-full_period_prop_plot + late_period_prop_plot &   
-  theme(panel.grid = element_blank(),
-        panel.grid.major.y = element_line(color = "grey50", linewidth = rel(0.25)),
-        strip.background = element_blank(),
-        strip.text = element_text(family = plot_font,  color = "white", size = rel(1), margin = margin(0,0,2,0), hjust = 0),
-        plot.margin = margin(6,2,2,2, "pt"),
-        panel.spacing = unit(12, "pt"),
-        axis.line.x = element_line(color = "white", linewidth = 0.5),
-        axis.line.y = element_line(color = "white", linewidth = 0.5),
-        axis.ticks = element_line(color = "white", linewidth = 0.5),
-        axis.text = element_text(color = "white"),
-        axis.title.x = element_text(color = "white", size = rel(0.8)),
-        text = element_text(family = plot_font,  color = "white"),
-        panel.background = element_rect(fill = "transparent",colour = NA),
-        plot.background = element_rect(fill = "transparent",colour = NA),
-        legend.position = "none")
-```
-
 ## Homicide victimization by race
 
 ```{r}
@@ -1088,27 +801,7 @@ combined_plot
 ```
 
 
-## Proportion using firearms
 
-```{r}
-full_period_prop_plot + late_period_prop_plot &   
-  theme(panel.grid = element_blank(),
-        panel.grid.major.y = element_line(color = "grey50", linewidth = rel(0.25)),
-        strip.background = element_blank(),
-        strip.text = element_text(family = plot_font,  color = "white", size = rel(1), margin = margin(0,0,2,0), hjust = 0),
-        plot.margin = margin(6,2,2,2, "pt"),
-        panel.spacing = unit(12, "pt"),
-        axis.line.x = element_line(color = "white", linewidth = 0.5),
-        axis.line.y = element_line(color = "white", linewidth = 0.5),
-        axis.ticks = element_line(color = "white", linewidth = 0.5),
-        axis.text = element_text(color = "white"),
-        axis.title.x = element_text(color = "white", size = rel(0.8)),
-        text = element_text(family = plot_font,  color = "white"),
-        panel.background = element_rect(fill = "transparent",colour = NA),
-        plot.background = element_rect(fill = "transparent",colour = NA),
-        legend.position = "none")
-
-```
 
 ## [Two similar periods of high gun violence, except...]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
 
@@ -1182,26 +875,6 @@ Both: **Legal cynicism** and **distrust**
 
 # [Legal cynicism, distrust,</br>and gun carrying]{.r-fit-text}{background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.4"}
 
-## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
-
-:::: {.columns}
-
-::: {.column width="55%"}
-
-> a cultural frame in which people perceive the law as **illegitimate**, **unresponsive**, and **ill equipped** to ensure public safety.
-
-> when **calling the police is not a viable option** to remedy one’s problems—individuals may instead **resolve their grievances by their own means**
-
-:::
-
-::: {.column width="45%"}
-
-![](img/kirk-papachristos.png)
-
-:::
-
-::::
-
 
 ##  {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
 
@@ -1232,6 +905,47 @@ Guns also:
 *Concentrated disadvantage &rarr; **alienation** from institutions*
 
 :::
+
+## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+> This is mirrored in Sampson and Bartusch’s (1998: 782) normative conception of legal cynicism as a state in which the (legal) **rules of society are no longer seen as binding** within a community: “Normlessness and powerlessness tend also to go hand in hand, breeding **cynicism about the rules of the society and their application**”.
+
+:::
+
+::: {.column width="45%"}
+
+![](img/sampson-bartusch.png)
+
+:::
+
+::::
+
+## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+> a cultural frame in which people perceive the law as **illegitimate**, **unresponsive**, and **ill equipped** to ensure public safety.
+
+> when **calling the police is not a viable option** to remedy one’s problems—individuals may instead **resolve their grievances by their own means**
+
+:::
+
+::: {.column width="45%"}
+
+![](img/kirk-papachristos.png)
+
+:::
+
+::::
+
+
+
 
 
 ## {background-image="img/benjamin-suter-mlOvsx4xdaA-unsplash.jpg" background-opacity="0.2"}
@@ -1475,9 +1189,23 @@ digraph G{
 ::::
 :::::
 
+# A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.4"}
 
 
-## Early evidence {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
+
+
+
+## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+
+&nbsp;
+
+**Gun violence**
+
+* Changing concentrations and contexts
+* Heterogeneity, carrying, and the new decline
+
+
+## Early evidence {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
 
 :::: {.columns}
 
@@ -1496,9 +1224,6 @@ digraph G{
 
 ::::
 
-## New worries {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
-
-![](img/anestis-et-al.png)
 
 ## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
 
@@ -1509,13 +1234,12 @@ digraph G{
 * Changing concentrations and contexts
 * Heterogeneity, carrying, and the new decline
 
-. . .
-
 **Cynicism, trust, and the life course**
 
 * Legal cynicism and gun carrying across eras
 * Formative years and consequences for legal cynicism
 * Social media and unstructured socialization
+* What are the key elements or combinations?
 
 
 ## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
@@ -1525,13 +1249,44 @@ digraph G{
 **National politics**
 
 * Declining legitimacy of institutions
-* Cynicism, gun culture, and right nationalism
+* Cynicism and gun culture
 
-. . .
+
+## New worries {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+
+![](img/anestis-et-al.png)
+
+## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
 
 &nbsp;
 
-> ... we suggest that there is value, as initiated here, to continued theorizing on life-course processes as cause and effect of macro changes—not just in gun violence but crime more generally. 
+**National politics**
+
+* Declining legitimacy of institutions
+* Cynicism and gun culture
+
+
+**Women's gun carrying and victimization**
+
+* Adolescent vs. adult processes
+* IPV and unintended consequences
+
+## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+
+&nbsp;
+
+**International implications**
+
+* Legal and institutional cynicism
+* Right nationalism, deregulation, and vigilantism
+
+## A research agenda {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+
+&nbsp;
+
+> By outlining a research agenda aimed at investigating these relationships, we hope to spark to a new wave of theorizing and research on life-course processes as cause and effect of macro-level changes—not just in gun violence but crime more generally. 
+
+
 
 
 ## Feedback and questions {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.4"}
@@ -1591,4 +1346,245 @@ digraph G{
 :::
 
 
+
+## [Onset of concealed carry by age]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
+
+```{r}
+#| cache: true
+#| warning: false
+#| message: false
+#| fig-width: 12
+#| fig-height: 4.5
+#| out-width: "100%"
+#| 
+draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
+  plot_out <- plot_curve(covar = covar, 
+           outcome = outcome, 
+           xaxis = xaxis, 
+           title = "none", 
+           b_size = 12, 
+           min_at_risk = 10, 
+           w5_sample = FALSE, 
+           weights = TRUE, 
+           trim_level = 0.95, 
+           font_fam = plot_font, 
+           ylims = ylims, 
+           year_mark = FALSE,
+           title_letters = FALSE,
+           risk_table = FALSE) +
+  labs(title = str_to_title(covar)) +
+  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
+  if(strata_labels){
+   plot_out <- plot_out +
+     geom_text(data = ~. |> 
+                    distinct(strata) |>
+                    mutate(age = case_match(as.character(strata),
+                             "Black" ~ 30,
+                             "White" ~ 30,
+                             "Hispanic" ~ 9,
+                             "Male" ~ 26,
+                             "Female" ~ 27,
+                             "1981" ~ 35,
+                             "1987" ~ 29,
+                             "1996" ~ 30,
+                             "1984" ~ 38
+                           ),
+                           cdf = case_match(as.character(strata),
+                             "Black" ~ 35,
+                             "White" ~ 3,
+                             "Hispanic" ~ 11,
+                             "Male" ~ 30,
+                             "Female" ~ 10,
+                             "1981" ~ 35,
+                             "1987" ~ 25,
+                             "1996" ~ 4,
+                             "1984" ~ 10
+                           )),
+                  aes(x = age, y = cdf, label = strata, color = strata),
+            size = 7,
+            family = plot_font)
+  }
+  plot_out <- plot_out +
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank(),
+          #panel.grid.major.y = element_line(color = "grey25"),
+          axis.ticks.x = element_line(color = "white"),
+          axis.ticks.y = element_line(color = "white"),
+          axis.text = element_text(color = "white"),
+          text = element_text(family = plot_font,  color = "white"),
+          legend.position = "none",
+          panel.background = element_rect(fill = "transparent",colour = NA),
+          plot.background = element_rect(fill = "transparent",colour = NA),
+          plot.margin = margin(0,0,0,0),
+          axis.line = element_line(color = "white", linewidth = 0.25))
+  if(noaxis){
+    plot_out <- plot_out + theme(axis.text.y = element_blank())
+  }
+  return(plot_out)
+}
+
+(
+  (draw_curve("race", "concealed_carry", ylims = c(0, 50),year_mark = TRUE) + ggtitle("Race / Ethnicity") + theme(plot.margin = margin(0,20,0,0))) + 
+  (draw_curve("sex", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
+  (draw_curve("cohort", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
+  ) &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of carry onset from non-parametric Turnbull MLE with survey and attrition weights")
+
+```
+
+* Rapidly rises in adolescence, then again in 30s
+* Differences sharpest in adolescence
+
+## [Onset of concealed carry by year]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
+
+```{r}
+#| cache: true
+#| warning: false
+#| message: false
+#| fig-width: 12
+#| fig-height: 4.5
+#| out-width: "100%"
+#| 
+draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
+  plot_out <- plot_curve(covar = covar, 
+           outcome = outcome, 
+           xaxis = xaxis, 
+           title = "none", 
+           b_size = 12, 
+           min_at_risk = 10, 
+           w5_sample = FALSE, 
+           weights = TRUE, 
+           trim_level = 0.95, 
+           font_fam = plot_font, 
+           ylims = ylims, 
+           year_mark = FALSE,
+           title_letters = FALSE,
+           risk_table = FALSE) +
+  labs(title = str_to_title(covar)) +
+  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
+  if(strata_labels){
+   plot_out <- plot_out +
+     geom_text(data = ~. |> 
+                    distinct(strata) |>
+                    mutate(age = case_match(as.character(strata),
+                             "Black" ~ 2012,
+                             "White" ~ 2010,
+                             "Hispanic" ~ 2000,
+                             "Male" ~ 2010,
+                             "Female" ~ 2010,
+                             "1981" ~ 2012,
+                             "1987" ~ 2012,
+                             "1996" ~ 2013,
+                             "1984" ~ 2005
+                           ),
+                           cdf = case_match(as.character(strata),
+                             "Black" ~ 18,
+                             "White" ~ 1.5,
+                             "Hispanic" ~ 12,
+                             "Male" ~ 23,
+                             "Female" ~ 6,
+                             "1984" ~ 11,
+                             "1981" ~ 25,
+                             "1987" ~ 14,
+                             "1996" ~ 1
+                           )),
+                  aes(x = age, y = cdf, label = strata, color = strata),
+            size = 7,
+            family = plot_font)
+  }
+  plot_out <- plot_out +
+    annotate("text", x = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]), label = c(2016, 2020), size = 4, vjust = 0, color = "white") +
+    annotate("segment", x = c(2016, 2020), xend = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]) - (ylims[2]/100), yend = c(-Inf,-Inf), linetype = "dashed", alpha = 0.75, linewidth = 0.5, color = "white")+
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank(),
+          #panel.grid.major.y = element_line(color = "grey25"),
+          axis.ticks.x = element_line(color = "white"),
+          axis.ticks.y = element_line(color = "white"),
+          axis.text = element_text(color = "white"),
+          text = element_text(family = plot_font,  color = "white"),
+          legend.position = "none",
+          panel.background = element_rect(fill = "transparent",colour = NA),
+          plot.background = element_rect(fill = "transparent",colour = NA),
+          plot.margin = margin(0,0,0,0),
+          axis.line = element_line(color = "white", linewidth = 0.25))
+  if(noaxis){
+    plot_out <- plot_out + theme(axis.text.y = element_blank())
+  }
+  return(plot_out)
+}
+
+(
+  (draw_curve("race", "concealed_carry", "year", ylims = c(0, 40),year_mark = TRUE) + ggtitle("Race / Ethnicity") + theme(plot.margin = margin(0,20,0,0))) + 
+  (draw_curve("sex", "concealed_carry", "year",ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
+  (draw_curve("cohort", "concealed_carry", "year", ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
+  ) &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of carry onset from non-parametric Turnbull MLE with survey and attrition weights")
+```
+
+* Adult increases are period effects
+* Large increases in new carriers since 2016
+
+## [Continuity: Who is still carrying in 2020?]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
+
+
+```{r}
+#| cache: true
+load("./data/continuity_within_data.RData")
+continuity_within_data |>
+  filter(group == "Within onset group" & concealed_carry_status != "Did not carry" & !str_detect(Initiation, "Never carried")) |>
+  mutate(Initiation = str_remove(Initiation, "\\n\\(n=.*$")) |>
+  ggplot(aes(x = Initiation, group = concealed_carry_status, fill = concealed_carry_status, y = pr)) +
+  geom_col() +
+  scale_fill_manual(values = as.vector(khroma::color("highcontrast")(2)), labels = c("Permitted carry" = "With permit", "Unpermitted carry" = "Without permit")) +
+  scale_y_continuous(labels = scales::label_percent(scale = 100), limits = c(0,1)) +
+  labs(x = NULL, y = NULL, title = NULL, fill = NULL) +
+  theme_minimal(base_size = 24) +
+  theme(panel.grid = element_blank(),
+        plot.caption = element_text(size = rel(0.6)),
+        axis.text = element_text(family = plot_font,  color = "white"),
+        text = element_text(family = plot_font,  color = "white"),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        plot.margin = margin(30,30,30,30, "pt"),
+        axis.ticks.y = element_line(color = "white"),
+        axis.line = element_line(color = "white", linewidth = 0.25),
+        legend.position = c(0.2, 0.9))
+```
+
+* 60% of young carriers not carrying today
+* Young carriers no more likely to carry without permits
+
+## [Exposure to gun violence and carrying]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
+
+```{r}
+#| cache: true
+load("./data/exp_preds.RData")
+exp_preds  |>
+  mutate(model = str_remove(model, "\\n\\(N=.*$")) |>
+  ggplot(aes(x = model, group = exposed, fill = exposed, y = estimate)) +
+  geom_col(position = "dodge") +
+  theme_minimal(base_size = 24) +
+  coord_cartesian(ylim = c(0, 0.25)) +
+  scale_y_continuous(labels = scales::label_percent(scale = 100)) +
+  # annotate("text", x = 0, y = 0.7, label = "Age", size = 9,  hjust = 0, color = "white") +
+  scale_fill_discrete(name = NULL) +
+  theme_minimal(base_size = 24) +
+  labs(x = NULL, y = NULL, caption = "Average predictions from Firth logit and Cox PH models adjusted for family and neighborhood characteristics") +
+  theme(panel.grid = element_blank(),
+        plot.caption = element_text(size = rel(0.5)),
+        text = element_text(family = plot_font,  color = "white"),
+        axis.ticks.length = unit(0, "pt"),
+        axis.text = element_text(color = "white"),
+        axis.text.x = element_text(vjust = 0.5, margin = margin(0,0,0,0), size = rel(1.2)),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        # panel.grid.major.y = element_line(color = "grey25"),
+        legend.position = c(0.15, 0.85),
+        plot.margin = margin(0,0,0,0),
+        axis.ticks.y = element_line(color = "white"),
+        axis.line = element_line(color = "white", linewidth = 0.25))
+```
+
+* Exposed adolescents twice as likely to carry
+* Adult carry similar between those exposed and not
 
